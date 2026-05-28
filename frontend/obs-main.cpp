@@ -80,6 +80,7 @@ string opt_starting_scene;
 
 bool restart = false;
 bool restart_safe = false;
+bool closed_to_tray = false;
 static QStringList arguments;
 
 string CurrentTimeString()

@@ -20,6 +20,7 @@
 #include "OBSBasic.hpp"
 
 extern bool opt_minimize_tray;
+extern bool closed_to_tray;
 
 void OBSBasic::SystemTrayInit()
 {
@@ -81,7 +82,15 @@ void OBSBasic::SystemTrayInit()
 	connect(sysTrayRecord, &QAction::triggered, this, &OBSBasic::RecordActionTriggered);
 	connect(sysTrayReplayBuffer.data(), &QAction::triggered, this, &OBSBasic::ReplayBufferActionTriggered);
 	connect(sysTrayVirtualCam.data(), &QAction::triggered, this, &OBSBasic::VirtualCamActionTriggered);
-	connect(exit, &QAction::triggered, this, &OBSBasic::close);
+	connect(exit, &QAction::triggered, this, [this]() {
+		// Qt does not fire closeEvent on a window that has never been shown.
+		// If the app was started minimized to tray, close() would silently do
+		// nothing, so we call closeWindow() directly in that case.
+		if (!isVisible())
+			closeWindow();
+		else
+			close();
+	});
 }
 
 void OBSBasic::IconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -127,6 +136,7 @@ void OBSBasic::SystemTray(bool firstStarted)
 	} else {
 		trayIcon->show();
 		if (firstStarted && (sysTrayWhenStarted || opt_minimize_tray)) {
+			closed_to_tray = true;
 			EnablePreviewDisplay(false);
 #ifdef __APPLE__
 			EnableOSXDockIcon(false);

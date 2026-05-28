@@ -91,6 +91,7 @@ extern bool opt_start_virtualcam;
 
 extern volatile long insideEventLoop;
 extern bool restart;
+extern bool closed_to_tray;
 
 extern bool EncoderAvailable(const char *encoder);
 
@@ -1730,11 +1731,12 @@ void OBSBasic::closeEvent(QCloseEvent *event)
 	}
 
 	bool sysTrayWhenClosed = config_get_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenClosed");
-	if (sysTrayWhenClosed && trayIcon && trayIcon->isVisible()) {
-      event->ignore();
-      hide();
-      return;
-  	}
+	if (sysTrayWhenClosed && !closed_to_tray && trayIcon && trayIcon->isVisible()) {
+		closed_to_tray = true;
+		event->ignore();
+		hide();
+		return;
+	}
 
 	if (remux && !remux->close()) {
 		event->ignore();
