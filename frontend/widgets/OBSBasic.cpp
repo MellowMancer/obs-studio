@@ -91,7 +91,6 @@ extern bool opt_start_virtualcam;
 
 extern volatile long insideEventLoop;
 extern bool restart;
-extern bool closed_to_tray;
 
 extern bool EncoderAvailable(const char *encoder);
 
@@ -1703,12 +1702,12 @@ bool OBSBasic::ResetAudio()
 	return obs_reset_audio2(&ai);
 }
 
-void OBSBasic::close()
+void OBSBasic::close(CloseSource source)
 {
 	if (isClosePromptOpen() || isClosing()) {
 		return;
 	}
-
+	closeSource = source;
 	OBSMainWindow::close();
 }
 
@@ -1726,13 +1725,13 @@ void OBSBasic::closeEvent(QCloseEvent *event)
 	if (!isReadyToClose()) {
 		event->ignore();
 
-		QTimer::singleShot(1000, this, &OBSBasic::close);
+		QTimer::singleShot(1000, this, [this]() { close(); });
 		return;
 	}
 
 	bool sysTrayWhenClosed = config_get_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenClosed");
-	if (sysTrayWhenClosed && !closed_to_tray && trayIcon && trayIcon->isVisible()) {
-		closed_to_tray = true;
+	if (sysTrayWhenClosed && closeSource != CloseSource::Tray && trayIcon && trayIcon->isVisible()) {
+		closeSource = CloseSource::QtCloseEvent;
 		event->ignore();
 		hide();
 		return;

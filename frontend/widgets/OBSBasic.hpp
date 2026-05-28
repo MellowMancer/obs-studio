@@ -236,6 +236,11 @@ class OBSBasic : public OBSMainWindow {
 		Horizontal,
 	};
 
+	enum class CloseSource {
+		Tray,
+		QtCloseEvent,
+	};
+
 	/* -------------------------------------
 	 * MARK: - General
 	 * -------------------------------------
@@ -287,7 +292,7 @@ private:
 	void LoadProject();
 
 public slots:
-	void close();
+	void close(CloseSource source = CloseSource::QtCloseEvent);
 	void UpdatePatronJson(const std::string &text, const std::string &error);
 	void UpdateEditMenu();
 	void applicationShutdown() noexcept;
@@ -319,6 +324,8 @@ public:
 	inline bool isClosing() { return isClosing_; }
 	inline bool isClosePromptOpen() { return isClosePromptOpen_; }
 	void closeWindow();
+
+	CloseSource closeSource = CloseSource::QtCloseEvent;
 
 protected:
 	bool isReadyToClose();

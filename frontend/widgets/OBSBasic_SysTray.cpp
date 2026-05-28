@@ -20,7 +20,6 @@
 #include "OBSBasic.hpp"
 
 extern bool opt_minimize_tray;
-extern bool closed_to_tray;
 
 void OBSBasic::SystemTrayInit()
 {
@@ -89,7 +88,7 @@ void OBSBasic::SystemTrayInit()
 		if (!isVisible())
 			closeWindow();
 		else
-			close();
+			close(CloseSource::Tray);
 	});
 }
 
@@ -136,7 +135,6 @@ void OBSBasic::SystemTray(bool firstStarted)
 	} else {
 		trayIcon->show();
 		if (firstStarted && (sysTrayWhenStarted || opt_minimize_tray)) {
-			closed_to_tray = true;
 			EnablePreviewDisplay(false);
 #ifdef __APPLE__
 			EnableOSXDockIcon(false);

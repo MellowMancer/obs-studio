@@ -56,7 +56,6 @@
 
 extern bool restart;
 extern bool restart_safe;
-extern bool closed_to_tray;
 extern volatile long insideEventLoop;
 extern bool safe_mode;
 
@@ -586,7 +585,6 @@ void OBSBasic::SetShowing(bool showing)
 #endif
 
 	} else if (showing && !isVisible()) {
-		closed_to_tray = false;
 		if (showHide) {
 			showHide->setText(QTStr("Basic.SystemTray.Hide"));
 		}
