@@ -1694,6 +1694,13 @@ void OBSBasic::closeEvent(QCloseEvent *event)
 		return;
 	}
 
+	bool sysTrayWhenClosed = config_get_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenClosed");
+	if (sysTrayWhenClosed && trayIcon && trayIcon->isVisible()) {
+      event->ignore();
+      hide();
+      return;
+  	}
+
 	if (remux && !remux->close()) {
 		event->ignore();
 		restart = false;
