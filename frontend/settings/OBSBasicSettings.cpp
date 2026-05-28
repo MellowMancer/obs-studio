@@ -370,6 +370,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->keepReplayStreamStops,CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->systemTrayEnabled,    CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->systemTrayWhenStarted,CHECK_CHANGED,  GENERAL_CHANGED);
+	HookWidget(ui->systemTrayWhenClosed ,CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->systemTrayAlways,     CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->saveProjectors,       CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->closeProjectors,      CHECK_CHANGED,  GENERAL_CHANGED);
@@ -1328,6 +1329,9 @@ void OBSBasicSettings::LoadGeneralSettings()
 
 	bool systemTrayWhenStarted = config_get_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenStarted");
 	ui->systemTrayWhenStarted->setChecked(systemTrayWhenStarted);
+
+	bool systemTrayWhenClosed = config_get_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenClosed");
+	ui->systemTrayWhenClosed->setChecked(systemTrayWhenClosed);
 
 	bool systemTrayAlways = config_get_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayMinimizeToTray");
 	ui->systemTrayAlways->setChecked(systemTrayAlways);
@@ -3174,6 +3178,11 @@ void OBSBasicSettings::SaveGeneralSettings()
 	if (WidgetChanged(ui->systemTrayWhenStarted)) {
 		config_set_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenStarted",
 				ui->systemTrayWhenStarted->isChecked());
+	}
+
+	if (WidgetChanged(ui->systemTrayWhenClosed)) {
+		config_set_bool(App()->GetUserConfig(), "BasicWindow", "SysTrayWhenClosed",
+				ui->systemTrayWhenClosed->isChecked());
 	}
 
 	if (WidgetChanged(ui->systemTrayAlways)) {
