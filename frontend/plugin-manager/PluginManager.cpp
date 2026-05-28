@@ -303,7 +303,7 @@ void PluginManager::open()
 
 			if (button == QMessageBox::Yes) {
 				restart = true;
-				main->close();
+				main->requestClose(OBSBasic::CloseSource::QtCloseEvent);
 			}
 		}
 	}

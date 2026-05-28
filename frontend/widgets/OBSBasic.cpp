@@ -1702,11 +1702,15 @@ bool OBSBasic::ResetAudio()
 	return obs_reset_audio2(&ai);
 }
 
-void OBSBasic::close(CloseSource source)
+void OBSBasic::close()
 {
-	if (isClosePromptOpen() || isClosing()) {
+	requestClose(CloseSource::QtCloseEvent);
+}
+
+void OBSBasic::requestClose(CloseSource source){
+	if (isClosePromptOpen() || isClosing())
 		return;
-	}
+	
 	closeSource = source;
 	OBSMainWindow::close();
 }
@@ -1725,7 +1729,7 @@ void OBSBasic::closeEvent(QCloseEvent *event)
 	if (!isReadyToClose()) {
 		event->ignore();
 
-		QTimer::singleShot(1000, this, [this]() { close(); });
+		QTimer::singleShot(1000, this, &OBSBasic::close);
 		return;
 	}
 

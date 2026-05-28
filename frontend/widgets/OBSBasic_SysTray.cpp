@@ -82,13 +82,14 @@ void OBSBasic::SystemTrayInit()
 	connect(sysTrayReplayBuffer.data(), &QAction::triggered, this, &OBSBasic::ReplayBufferActionTriggered);
 	connect(sysTrayVirtualCam.data(), &QAction::triggered, this, &OBSBasic::VirtualCamActionTriggered);
 	connect(exit, &QAction::triggered, this, [this]() {
-		// Qt does not fire closeEvent on a window that has never been shown.
-		// If the app was started minimized to tray, close() would silently do
-		// nothing, so we call closeWindow() directly in that case.
+		// /* Qt does not fire closeEvent on a window that has never been shown
+		// (It works if the window has been opened atleast once).
+		// If the app was started with minimized to tray, close() would silently do
+		// nothing, so we call closeWindow() directly in that case. */
 		if (!isVisible())
 			closeWindow();
 		else
-			close(CloseSource::Tray);
+			requestClose(CloseSource::Tray);
 	});
 }
 

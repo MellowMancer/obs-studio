@@ -1886,7 +1886,7 @@ void OBSApp::processSigInt()
 	OBSBasic *main = OBSBasic::Get();
 	if (main) {
 		main->saveAll();
-		main->close();
+		main->requestClose(OBSBasic::CloseSource::QtCloseEvent);
 	}
 #else
 	quit();
