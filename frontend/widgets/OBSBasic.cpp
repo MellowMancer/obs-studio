@@ -1729,7 +1729,7 @@ void OBSBasic::closeEvent(QCloseEvent *event)
 	if (!isReadyToClose()) {
 		event->ignore();
 
-		QTimer::singleShot(1000, this, &OBSBasic::close);
+		QTimer::singleShot(1000, this, [this]() { requestClose(closeSource); });
 		return;
 	}
 

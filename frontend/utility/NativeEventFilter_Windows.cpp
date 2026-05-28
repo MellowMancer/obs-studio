@@ -46,7 +46,9 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
 				if (result) {
 					*result = FALSE;
 				}
-				QMetaObject::invokeMethod(main, "close", Qt::QueuedConnection);
+				QMetaObject::invokeMethod(
+					main, [main]() { main->requestClose(OBSBasic::CloseSource::QtCloseEvent); },
+					Qt::QueuedConnection);
 				return true;
 			}
 
