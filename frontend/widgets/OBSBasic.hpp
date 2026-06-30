@@ -293,7 +293,7 @@ public:
 	};
 
 public slots:
-	void requestClose(CloseSource closeSource);
+	void requestClose(CloseSource source);
 	void UpdatePatronJson(const std::string &text, const std::string &error);
 	void UpdateEditMenu();
 	void applicationShutdown() noexcept;

@@ -1707,10 +1707,12 @@ void OBSBasic::close()
 	requestClose(CloseSource::QtCloseEvent);
 }
 
-void OBSBasic::requestClose(CloseSource source){
-	if (isClosePromptOpen() || isClosing())
+void OBSBasic::requestClose(CloseSource source)
+{
+	if (isClosePromptOpen() || isClosing()) {
 		return;
-	
+	}
+
 	closeSource = source;
 	OBSMainWindow::close();
 }
